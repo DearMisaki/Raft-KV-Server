@@ -31,8 +31,8 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
   }
 
   const google::protobuf::ServiceDescriptor* sd = method->service();
-  std::string service_name = sd->name();     // service_name
-  std::string method_name = method->name();  // method_name
+  std::string service_name = std::string(sd->name());     // service_name
+  std::string method_name = std::string(method->name());  // method_name
 
   // 获取参数的序列化字符串长度 args_size
   uint32_t args_size{};
@@ -82,7 +82,7 @@ void MprpcChannel::CallMethod(const google::protobuf::MethodDescriptor* method,
   //    std::cout << "============================================" << std::endl;
 
   // 发送rpc请求
-  //失败会重试连接再发送，重试连接失败会直接return
+  // 失败会重试连接再发送，重试连接失败会直接return
   while (-1 == send(m_clientFd, send_rpc_str.c_str(), send_rpc_str.size(), 0)) {
     char errtxt[512] = {0};
     sprintf(errtxt, "send error! errno:%d", errno);
@@ -161,7 +161,7 @@ MprpcChannel::MprpcChannel(string ip, short port, bool connectNow) : m_ip(ip), m
   //  /UserServiceRpc/Login
   if (!connectNow) {
     return;
-  }  //可以允许延迟连接
+  }  // 可以允许延迟连接
   std::string errMsg;
   auto rt = newConnect(ip.c_str(), port, &errMsg);
   int tryCount = 3;

@@ -7,3 +7,6 @@ lib
 build
 *.out
 *.a
+.cache
+.run
+compile_commands.json

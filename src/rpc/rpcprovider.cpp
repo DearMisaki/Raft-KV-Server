@@ -22,7 +22,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service) {
   // 获取了服务对象的描述信息
   const google::protobuf::ServiceDescriptor *pserviceDesc = service->GetDescriptor();
   // 获取服务的名字
-  std::string service_name = pserviceDesc->name();
+  std::string service_name = std::string(pserviceDesc->name());
   // 获取服务对象service的方法的数量
   int methodCnt = pserviceDesc->method_count();
 
@@ -31,7 +31,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service) {
   for (int i = 0; i < methodCnt; ++i) {
     // 获取了服务对象指定下标的服务方法的描述（抽象描述） UserService   Login
     const google::protobuf::MethodDescriptor *pmethodDesc = pserviceDesc->method(i);
-    std::string method_name = pmethodDesc->name();
+    std::string method_name = std::string(pmethodDesc->name());
     service_info.m_methodMap.insert({method_name, pmethodDesc});
   }
   service_info.m_service = service;
@@ -40,7 +40,7 @@ void RpcProvider::NotifyService(google::protobuf::Service *service) {
 
 // 启动rpc服务节点，开始提供rpc远程网络调用服务
 void RpcProvider::Run(int nodeIndex, short port) {
-  //获取可用ip
+  // 获取可用ip
   char *ipC;
   char hname[128];
   struct hostent *hent;
@@ -59,10 +59,10 @@ void RpcProvider::Run(int nodeIndex, short port) {
   //    {
   //        std::cout << "获取可用端口号失败！" << std::endl;
   //    }
-  //写入文件 "test.conf"
+  // 写入文件 "test.conf"
   std::string node = "node" + std::to_string(nodeIndex);
   std::ofstream outfile;
-  outfile.open("test.conf", std::ios::app);  //打开文件并追加写入
+  outfile.open("test.conf", std::ios::app);  // 打开文件并追加写入
   if (!outfile.is_open()) {
     std::cout << "打开文件失败！" << std::endl;
     exit(EXIT_FAILURE);
@@ -71,7 +71,7 @@ void RpcProvider::Run(int nodeIndex, short port) {
   outfile << node + "port=" + std::to_string(port) << std::endl;
   outfile.close();
 
-  //创建服务器
+  // 创建服务器
   muduo::net::InetAddress address(ip, port);
 
   // 创建TcpServer对象
@@ -230,7 +230,7 @@ void RpcProvider::OnMessage(const muduo::net::TcpConnectionPtr &conn, muduo::net
   由于xx方法被 用户注册的service类 重写了，因此这个方法运行的时候会调用 用户注册的service类 的xx方法
   真的是妙呀
   */
-  //真正调用方法
+  // 真正调用方法
   service->CallMethod(method, nullptr, request, response, done);
 }
 
